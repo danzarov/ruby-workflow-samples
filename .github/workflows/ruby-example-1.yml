@@ -28,7 +28,7 @@ jobs:
           ruby-version: '2.6' 
       
       - name: Testing ruby.
-        run: ruby -e 'print "Hello Ruby!"'
+        run: ruby -e 'print "Hello Ruby! Caching test"'
 
       - name: Install bundler.
         run: sudo gem install bundler 

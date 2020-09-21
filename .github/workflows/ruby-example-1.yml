@@ -40,5 +40,4 @@ jobs:
         if: steps.cache-ruby-gems.outputs.cache-hit != 'true'
                 
       - name: Testing cached dependencies with RSpec.
-        run: |
-          bundle exec rspec
+        run: bundle exec rspec

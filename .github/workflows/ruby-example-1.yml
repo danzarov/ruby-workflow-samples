@@ -1,0 +1,44 @@
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  ruby-example-1:
+    name: job using github runner with ruby installed
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository.
+        uses: actions/checkout@v2
+
+      - name: Cache ruby gems directory.
+        uses: actions/cache@v2
+        id: cache-ruby-gems
+        with:
+          path: vendor/bundle
+          key: ${{ runner.os }}-gems
+
+      - name: Setup ruby.
+        uses: actions/setup-ruby@v1
+        with:
+          ruby-version: '2.6' 
+      
+      - name: Testing ruby.
+        run: ruby -e 'print "Hello Ruby!"'
+
+      - name: Install bundler.
+        run: sudo gem install bundler 
+
+      - name: Config path.
+        run: bundle config path vendor/bundle
+
+      - name: Installing dependencies, in case it's not cached yet.
+        run: |
+          bundle install --jobs 4 --retry 3
+        if: steps.cache-ruby-gems.outputs.cache-hit != 'true'
+                
+      - name: Testing cached dependencies with RSpec.
+        run: |
+          bundle exec rspec
